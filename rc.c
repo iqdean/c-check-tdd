@@ -74,6 +74,11 @@ int chk_for_valid_roman_digit(char roman_digit){
   return ec;
 }
 
+/*
+ * 0 - ERROR : if there's invalid digit detectect
+ * strlen(p) - number of roman digits in the input string
+ * FIXME: ERROR Reporting is backass backwards!!!
+ */
 int chk_for_valid_roman_num(char *p){
   char *q = &p[0];
   int i;
@@ -96,8 +101,7 @@ int getRomanNumber(char *p){
 
 /*  if a subtractive appears with a I, X, or C to the left of a "larger" symbol
  *  we need to substitute the pair for the correct numeric value
- *  ec = 0 : no subtractive found
- *  ec = 1 : found subtrative in the roman number 
+ *  
 */
 
 int toBase10fromRoman(char *p){
@@ -199,7 +203,7 @@ int searchAndReplace(char *p){
   int i;
   
   for (i = 0; i < 6; i++){
-    printf("o_string: %s s_string: %s  r_string: %s \n", p, s_str[i], r_str[i]);
+    //printf("o_string: %s s_string: %s  r_string: %s \n", p, s_str[i], r_str[i]);
     replace(p, s_str[i], r_str[i]);
   }
   return 0;
@@ -227,6 +231,11 @@ int getRomansFromBase10(int dividend, int divisor, int *quotient, int *remainder
 }
 /* caller allocates mem for roman */
 int toRomanFromBase10(int base10, char *roman){
+  
+  if ((base10 == 0)||(base10 > 4999)){
+    return 1; // ERROR - 0 is a invalid Roman Number:   1 < Valid Romans < 4999
+  }
+  
   char romans[] = { 'M',  'D', 'C','L','X','V','I'}; // roman digits
   int divisors[] = {1000, 500, 100, 50, 10, 5,  1};  // divisors
   int quotients[]= { 0,    0,   0,  0,   0, 0,  0};   // resulting quotients
@@ -248,37 +257,60 @@ int toRomanFromBase10(int base10, char *roman){
   roman[0]='\0';
   int j;
   // formulate char string of the roman digits we find in our base10 number
-  printf("substr: %s, roman: %s\n", substr, roman);
+  //printf("substr: %s, roman: %s\n", substr, roman);
   for (i=0; i < 7; i++){
     if (quotients[i] != 0 ){
       for (j=0; j < quotients[i]; j++){
-        printf("i: %d j: %d substr: %s romans[i]: %c \n", i, j, substr, romans[i]);
+        //printf("i: %d j: %d substr: %s romans[i]: %c \n", i, j, substr, romans[i]);
         strncat(substr, &romans[i], 1);       // collect our romans into a substr
       }
-      printf("roman: %s  substr: %s\n", roman, substr);
+      //printf("roman: %s  substr: %s\n", roman, substr);
       strncat(roman, substr, strlen(substr)); // and stick em to the output string
       substr[0]='\0';                         // then empty our substr for the next loop
 
-      printf("roman: %s\n", roman);
+      //printf("roman: %s\n", roman);
     }
   }
   searchAndReplace(roman);
-  printf("roman num out: %s\n", roman);
+  //printf("roman num out: %s\n", roman);
   
   free(substr);
   
+  return 0;   // SUCCESS
+}
+
+/* int add2Romans( char *a, char *b, char *result)
+ *  0 - success
+ * ERRORS
+ *  1 - invalid inputs: invalid digits detected in roman numerals a or b
+ *      if [ (a || b) != ['M' || 'D' || 'C' || 'L' || 'X' || 'V' || 'I'] 
+ *  2 - invalid inputs: inputs a or b are out of range
+ *      if [ (a <= 0)||(b <= 0)||(a > 4999)||(b > 4999) ]
+ *  3 - invalid output result is out of range :   
+ *      if (a + b) > 4999 
+ */
+int add2Romans(char *b, char *a, char *result){
+  // validate roman numeral inputs - check for valid roman digits
+  printf("chk_for_valid_roman_num(b): %d\n", chk_for_valid_roman_num(b));
+  printf("chk_for_valid_roman_num(a): %d\n", chk_for_valid_roman_num(a));
+  if ( (chk_for_valid_roman_num(b) == 0) || (chk_for_valid_roman_num(b) == 0) ){
+    return 1;
+  }
+  // validate inputs - check for out-of-range condition
+  if ((toBase10fromRoman(b) > 4999) || (toBase10fromRoman(a) > 4999)){
+    return 2;
+  }
+  if ( ( toBase10fromRoman(b) + toBase10fromRoman(a) ) > 4999 ){
+    return 3;
+  }
+  
+  int base10 = toBase10fromRoman(b) + toBase10fromRoman(a);
+  toRomanFromBase10(base10,result);
   return 0;
 }
 
-/* convert roman number to base 10 number 
- * int ec from_roman(char *p)
- * char *p  ptr to char[] holding a valid roman number
- * ec        error code   0 = SUCCESS   !0 = Error
- */
-int from_roman(char *p){
-  int ec;
-  ec =0;
-  return ec;
+int subtract2Romans(char *b, char *a){
+  return 0;
 }
 
 
@@ -312,6 +344,14 @@ int main () {
   } else {
     printf(" %d > toRomanFromBase10 > ERROR \n", base10);
   }
+  
+  int ec = add2Romans(num1, num2, num4);
+  if (ec == 0){
+    printf("%s + %s = %s\n", num1, num2, num4);
+  } else {
+    printf("add2Romans(%s + %s) resulted in ERROR: %d\n", num1, num2, ec);
+  }
+   printf("toBase10fromRoman(%s): %d\n", num4, toBase10fromRoman(num4));
 
   free(num1);
   free(num2);
