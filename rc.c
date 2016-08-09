@@ -279,20 +279,20 @@ int toRomanFromBase10(int base10, char *roman){
   return 0;   // SUCCESS
 }
 
-/* int add2Romans( char *a, char *b, char *result)
- *  0 - success
+/* int add2Romans( char *b, char *a, char *result)
+ *  0 - success  result = b + a
  * ERRORS
  *  1 - invalid inputs: invalid digits detected in roman numerals a or b
  *      if [ (a || b) != ['M' || 'D' || 'C' || 'L' || 'X' || 'V' || 'I'] 
  *  2 - invalid inputs: inputs a or b are out of range
  *      if [ (a <= 0)||(b <= 0)||(a > 4999)||(b > 4999) ]
- *  3 - invalid output result is out of range :   
+ *  3 - invalid output: result is going to be out of range   
  *      if (a + b) > 4999 
  */
 int add2Romans(char *b, char *a, char *result){
   // validate roman numeral inputs - check for valid roman digits
-  printf("chk_for_valid_roman_num(b): %d\n", chk_for_valid_roman_num(b));
-  printf("chk_for_valid_roman_num(a): %d\n", chk_for_valid_roman_num(a));
+  //printf("chk_for_valid_roman_num(b): %d\n", chk_for_valid_roman_num(b));
+  //printf("chk_for_valid_roman_num(a): %d\n", chk_for_valid_roman_num(a));
   if ( (chk_for_valid_roman_num(b) == 0) || (chk_for_valid_roman_num(b) == 0) ){
     return 1;
   }
@@ -309,7 +309,34 @@ int add2Romans(char *b, char *a, char *result){
   return 0;
 }
 
-int subtract2Romans(char *b, char *a){
+/* int subtract2Romans( char *b, char *a, char *result)
+ *  0 - success    result = b-a
+ * ERRORS
+ *  1 - invalid inputs: invalid digits detected in roman numerals a or b
+ *      if [ (a || b) != ['M' || 'D' || 'C' || 'L' || 'X' || 'V' || 'I'] 
+ *  2 - invalid inputs: inputs a or b are out of range
+ *      if [ (a <= 0)||(b <= 0)||(a > 4999)||(b > 4999) ]
+ *            \\\\\\\\////////
+ *            this is a given since you can't represent zero with roman digits
+ *  3 - invalid output: result is going to be out of range  or negative
+ *      if (b <= a) - resulting in a negative number
+ */
+
+int subtract2Romans(char *b, char *a, char *result){
+  // validate inputs - check for invalid roman digits in the input strings
+    if ( (chk_for_valid_roman_num(b) == 0) || (chk_for_valid_roman_num(b) == 0) ){
+    return 1;
+  }
+  // validate inputs - check for out-of-range condition, MAX_ROMAN = 4999 
+  if ((toBase10fromRoman(b) > 4999) || (toBase10fromRoman(a) > 4999)){
+    return 2;
+  }
+  if ( toBase10fromRoman(b) <= toBase10fromRoman(a) ){
+    return 3;
+  }
+  
+  int base10 = toBase10fromRoman(b) - toBase10fromRoman(a);
+  toRomanFromBase10(base10,result);
   return 0;
 }
 
@@ -326,6 +353,7 @@ int main () {
   num3 = (char *) malloc(100);
   char *num4 = (char *) malloc(100);
   
+  // test chk_for_valid_roman_num(*p) & chk_for_roman_digit(char roman_digit)
   while (getRomanNumber(num1) == 0) {
     printf("You entered invalid Roman Number, try again \n");
   }
@@ -334,25 +362,38 @@ int main () {
     printf("You entered invalid Roman Number, try again \n");
   }
 
+  // test toBase10fromRoman(char *roman)
   printf("toBase10fromRoman(%s): %d\n", num1, toBase10fromRoman(num1));
   printf("toBase10fromRoman(%s): %d\n", num2, toBase10fromRoman(num2));
 
   int base10 = toBase10fromRoman(num2);
 
+  // test toRomanFromBase10(base10, char *roman)
   if (toRomanFromBase10(base10, num3) == 0) {
     printf(" %d > toRomanFromBase10 > %s \n", base10, num3);
   } else {
     printf(" %d > toRomanFromBase10 > ERROR \n", base10);
   }
   
+  // test add2Romans(char *b, char *a, char *result)
   int ec = add2Romans(num1, num2, num4);
   if (ec == 0){
-    printf("%s + %s = %s\n", num1, num2, num4);
+    printf("add2Romans(%s + %s = %s)\n", num1, num2, num4);
+    printf("toBase10fromRoman(%s): %d\n", num4, toBase10fromRoman(num4));
   } else {
     printf("add2Romans(%s + %s) resulted in ERROR: %d\n", num1, num2, ec);
   }
-   printf("toBase10fromRoman(%s): %d\n", num4, toBase10fromRoman(num4));
-
+   
+  // test subtract2Romans(char *b, char *a, char *result)  result = b-a
+  ec = subtract2Romans(num4, num2, num3);
+  if (ec == 0){
+    printf("subtract2Romans(%s - %s = %s)\n", num4, num2, num3);
+    printf("toBase10fromRoman(%s): %d\n", num3, toBase10fromRoman(num3));
+  } else {
+    printf("subtract2Romans(%s - %s) resulted in ERROR: %d\n", num4, num2, ec);
+  }
+ 
+   
   free(num1);
   free(num2);
   free(num3);
