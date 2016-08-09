@@ -1,0 +1,85 @@
+
+iqdean@hpdm4:~/u1404/pillar/pillar7$ cat Makefile
+CC=gcc
+CFLAGS=-Wall -fPIC -I. -c   # add -g to include debug symbols
+
+LIB=libroman.so     # make libroman.so  - build a shared library
+LIBDEST=./
+LIBSRC=romancalc.c  # *.c includes *.h
+LIBOBJ=$(LIBSRC:.c=.o)
+	
+LDFLAGS=-shared -lc -Wl,-soname,$(LIB)
+ 
+install: $(LIB)
+	@echo romancalc - installing $(LIB)
+	@install -m 444 $(LIB) $(LIBDEST)
+
+# gcc -shared -lc -Wl,-soname,libroman.so -o libroman.so romancalc.o
+
+$(LIB): $(LIBOBJ) 
+	@echo romancalc - linking $(LIB)
+	$(CC) $(LDFLAGS) -o $(LIB) $(LIBOBJ)
+
+.c.o:
+	@echo romancalc - compiling $<
+	@$(CC) $(CFLAGS) $< -o $@
+
+# Before running test-shared
+#  set LD_LIBRARY_PATH = <path_to>/libroman.so
+#  ex: $ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
+# OR cp/install libroman.so to /usr/lib dir
+test-shared: main.o
+	@echo build test prog to use libroman.so
+	gcc main.c -L. -lroman -o test-shared
+
+clean:
+	@echo romancalc - cleaning *.o *.so test-shared
+	@$(RM) -f *.o *.so test-shared
+
+
+
+iqdean@hpdm4:~/u1404/pillar/pillar7$ env | grep LD_LI
+iqdean@hpdm4:~/u1404/pillar/pillar7$ make clean
+romancalc - cleaning main.o romancalc.o libroman.so test-shared
+iqdean@hpdm4:~/u1404/pillar/pillar7$ ls -al
+total 52
+drwxrwxrwx 1 root root 4096 Aug  9 15:22 .
+drwxrwxrwx 1 root root 4096 Aug  7 12:43 ..
+drwxrwxrwx 1 root root 4096 Aug  9 11:35 bkup
+drwxrwxrwx 1 root root 4096 Aug  9 12:02 docs
+drwxrwxrwx 1 root root 4096 Aug  9 15:16 .git
+-rwxrwxrwx 1 root root 1826 Aug  9 00:33 main.c
+-rwxrwxrwx 1 root root  929 Aug  9 15:20 Makefile
+-rwxrwxrwx 1 root root  905 Aug  9 15:11 Makefile.shared
+-rwxrwxrwx 1 root root  641 Aug  9 14:39 Makefile.static
+drwxrwxrwx 1 root root    0 Aug  8 09:54 nbproject
+-rwxrwxrwx 1 root root 9969 Aug  9 00:43 romancalc.c
+-rwxrwxrwx 1 root root 1391 Aug  9 00:43 romancalc.h
+iqdean@hpdm4:~/u1404/pillar/pillar7$ make libroman.so
+romancalc - compiling romancalc.c
+romancalc.c: In function ‘toBase10fromRoman’:
+romancalc.c:125:9: warning: value computed is not used [-Wunused-value]
+         *q++;        
+         ^
+romancalc - linking libroman.so
+gcc -shared -lc -Wl,-soname,libroman.so      -o libroman.so      romancalc.o
+iqdean@hpdm4:~/u1404/pillar/pillar7$ make test-shared
+romancalc - compiling main.c
+build test prog to use libroman.so
+gcc main.c -L. -lroman -o test-shared
+iqdean@hpdm4:~/u1404/pillar/pillar7$ ./test-shared
+./test-shared: error while loading shared libraries: libroman.so: cannot open shared object file: No such file or directory
+iqdean@hpdm4:~/u1404/pillar/pillar7$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
+iqdean@hpdm4:~/u1404/pillar/pillar7$ env | grep LD_LIB
+LD_LIBRARY_PATH=:.
+iqdean@hpdm4:~/u1404/pillar/pillar7$ ./test-shared
+Enter a Roman Number : XXIV
+Enter a Roman Number : CMXI
+toBase10fromRoman(XXIV): 24
+toBase10fromRoman(CMXI): 911
+ 911 > toRomanFromBase10 > CMXI 
+add2Romans(XXIV + CMXI = CMXXXV)
+toBase10fromRoman(CMXXXV): 935
+subtract2Romans(CMXXXV - CMXI = XXIV)
+toBase10fromRoman(XXIV): 24
+iqdean@hpdm4:~/u1404/pillar/pillar7$ 

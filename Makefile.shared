@@ -31,5 +31,5 @@ test-shared: main.o
 	gcc main.c -L. -lroman -o test-shared
 
 clean:
-	@echo romancalc - cleaning *.o *.so test-shared
-	@$(RM) -f *.o *.so test-shared
+	@echo romancalc - cleaning *.o *.so
+	@$(RM) -f *.o *.so
