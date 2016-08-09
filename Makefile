@@ -20,6 +20,10 @@ $(LIB): $(LIBOBJ)
 	@echo lib Makefile - compiling $<
 	@$(CC) $(CFLAGS) -c $< -o $@
 
+test-static: main.o
+	@echo building test prog using libroman.a
+	gcc -static main.c -L. -lroman -o test-static
+
 clean:
-	@echo lib Makefile - cleaning
+	@echo lib Makefile - cleaning *.o *.a
 	@$(RM) -f *.o *.a
