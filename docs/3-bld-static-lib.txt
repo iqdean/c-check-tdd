@@ -1,0 +1,119 @@
+
+CC=gcc
+CFLAGS=-Wall
+AR=ar
+RM=rm
+LIB=libroman.a   # make libroman.a  - build a static library
+LIBDEST=./
+
+LIBSRC=romancalc.c  # *.c includes *.h so we should be good?
+
+LIBOBJ=$(LIBSRC:.c=.o)
+
+install: $(LIB)
+	@echo lib Makefile - installing $(LIB)
+	@install -m 444 $(LIB) $(LIBDEST)
+
+$(LIB): $(LIBOBJ) 
+	@echo lib Makefile - archiving $(LIB)
+	@$(AR) rcs $(LIB) $(LIBOBJ)        # ar --help for rcs
+
+.c.o:
+	@echo lib Makefile - compiling $<
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	@echo lib Makefile - cleaning
+	@$(RM) -f *.o *.a
+
+
+
+
+iqdean@hpdm4:~/u1404/pillar/pillar7$ make clean
+lib Makefile - cleaning
+iqdean@hpdm4:~/u1404/pillar/pillar7$ ls -al
+total 122
+drwxrwxrwx 1 root root  4096 Aug  9 10:45 .
+drwxrwxrwx 1 root root  4096 Aug  7 12:43 ..
+drwxrwxrwx 1 root root     0 Aug  8 22:24 docs
+drwxrwxrwx 1 root root  4096 Aug  9 09:53 .git
+-rwxrwxrwx 1 root root  1826 Aug  9 00:33 main.c
+-rwxrwxrwx 1 root root   526 Aug  9 10:45 Makefile
+-rwxrwxrwx 1 root root   252 Aug  9 09:53 Makefile.bak
+-rwxrwxrwx 1 root root  9969 Aug  9 00:43 romancalc.c
+-rwxrwxrwx 1 root root  1391 Aug  9 00:43 romancalc.h
+
+iqdean@hpdm4:~/u1404/pillar/pillar7$ make libroman.a
+lib Makefile - compiling romancalc.c
+romancalc.c: In function ‘toBase10fromRoman’:
+romancalc.c:125:9: warning: value computed is not used [-Wunused-value]
+         *q++;        
+         ^
+lib Makefile - archiving libroman.a
+iqdean@hpdm4:~/u1404/pillar/pillar7$ ls -al
+total 142
+drwxrwxrwx 1 root root  4096 Aug  9 10:46 .
+drwxrwxrwx 1 root root  4096 Aug  7 12:43 ..
+drwxrwxrwx 1 root root     0 Aug  8 22:24 docs
+drwxrwxrwx 1 root root  4096 Aug  9 09:53 .git
+-rwxrwxrwx 1 root root  8330 Aug  9 10:46 libroman.a
+-rwxrwxrwx 1 root root   526 Aug  9 10:45 Makefile
+-rwxrwxrwx 1 root root   252 Aug  9 09:53 Makefile.bak
+-rwxrwxrwx 1 root root  9969 Aug  9 00:43 romancalc.c
+-rwxrwxrwx 1 root root  1391 Aug  9 00:43 romancalc.h
+-rwxrwxrwx 1 root root  7968 Aug  9 10:46 romancalc.o
+
+iqdean@hpdm4:~/u1404/pillar/pillar7$ ar t libroman.a 
+romancalc.o
+
+iqdean@hpdm4:~/u1404/pillar/pillar7$ nm libroman.a
+
+romancalc.o:
+00000000000006a9 T add2Romans
+000000000000006c T chk_for_valid_roman_digit
+00000000000000d8 T chk_for_valid_roman_num
+                 U free
+000000000000014c T getRomanNumber
+000000000000047b T getRomansFromBase10
+                 U __isoc99_scanf
+                 U malloc
+                 U printf
+000000000000027a T replace
+0000000000000000 T roman2base10
+00000000000003d2 T searchAndReplace
+                 U sprintf
+                 U __stack_chk_fail
+                 U strcpy
+                 U strlen
+                 U strncat
+                 U strncpy
+                 U strstr
+000000000000077b T subtract2Romans
+000000000000018b T toBase10fromRoman
+00000000000004bd T toRomanFromBase10
+
+iqdean@hpdm4:~/u1404/pillar/pillar7$ nm libroman.a --demangle
+
+romancalc.o:
+00000000000006a9 T add2Romans
+000000000000006c T chk_for_valid_roman_digit
+00000000000000d8 T chk_for_valid_roman_num
+                 U free
+000000000000014c T getRomanNumber
+000000000000047b T getRomansFromBase10
+                 U __isoc99_scanf
+                 U malloc
+                 U printf
+000000000000027a T replace
+0000000000000000 T roman2base10
+00000000000003d2 T searchAndReplace
+                 U sprintf
+                 U __stack_chk_fail
+                 U strcpy
+                 U strlen
+                 U strncat
+                 U strncpy
+                 U strstr
+000000000000077b T subtract2Romans
+000000000000018b T toBase10fromRoman
+00000000000004bd T toRomanFromBase10
