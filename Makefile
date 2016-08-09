@@ -1,10 +1,25 @@
+CC=gcc
 CFLAGS=-Wall
-#LIBS=-lcheck
+AR=ar
+RM=rm
 
-test: romancalc.c main.c
-	gcc $(CFLAGS) -o test romancalc.c main.c 
+LIB=libroman.a   # make libroman.a  - build a static library
+LIBDEST=./
+LIBSRC=romancalc.c  # *.c includes *.h
+LIBOBJ=$(LIBSRC:.c=.o)
+
+install: $(LIB)
+	@echo lib Makefile - installing $(LIB)
+	@install -m 444 $(LIB) $(LIBDEST)
+
+$(LIB): $(LIBOBJ) 
+	@echo lib Makefile - archiving $(LIB)
+	@$(AR) rcs $(LIB) $(LIBOBJ)        # ar --help for rcs
+
+.c.o:
+	@echo lib Makefile - compiling $<
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	-rm -f *.o
-	-rm -f test
-
+	@echo lib Makefile - cleaning
+	@$(RM) -f *.o *.a
