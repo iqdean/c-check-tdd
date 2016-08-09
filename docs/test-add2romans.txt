@@ -1,0 +1,11 @@
+iqdean@hpdm4:~/u1404/pillar/pillar7$ ./test
+Enter a Roman Number : XXIV
+Enter a Roman Number : CMXX
+toBase10fromRoman(XXIV): 24
+toBase10fromRoman(CMXX): 920
+ 920 > toRomanFromBase10 > CMXX 
+chk_for_valid_roman_num(b): 4
+chk_for_valid_roman_num(a): 4
+XXIV + CMXX = CMXLIV
+toBase10fromRoman(CMXLIV): 944
+
