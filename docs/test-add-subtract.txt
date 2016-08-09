@@ -1,0 +1,22 @@
+iqdean@hpdm4:~/u1404/pillar/pillar7$ ./test
+Enter a Roman Number : XXIV
+Enter a Roman Number : CMXX
+toBase10fromRoman(XXIV): 24
+toBase10fromRoman(CMXX): 920
+ 920 > toRomanFromBase10 > CMXX 
+add2Romans(XXIV + CMXX = CMXLIV)
+toBase10fromRoman(CMXLIV): 944
+subtract2Romans(CMXLIV - CMXX = XXIV)
+toBase10fromRoman(XXIV): 24
+
+iqdean@hpdm4:~/u1404/pillar/pillar7$ ./test
+Enter a Roman Number : MMMCMXCIII
+Enter a Roman Number : I
+toBase10fromRoman(MMMCMXCIII): 3993
+toBase10fromRoman(I): 1
+ 1 > toRomanFromBase10 > I 
+add2Romans(MMMCMXCIII + I = MMMCMXCIV)
+toBase10fromRoman(MMMCMXCIV): 3994
+subtract2Romans(MMMCMXCIV - I = MMMCMXCIII)
+toBase10fromRoman(MMMCMXCIII): 3993
+

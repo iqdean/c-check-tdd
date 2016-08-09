@@ -2,14 +2,22 @@
 #include <string.h>
 #include <stdlib.h>
 
-/*
-char * sub2RomanNumbers(char *a, char *b){
-  testing;
-  return *a;
-}
+/* ROMAN NUMERALS 101
+ * Roman numerals are written as combinations of the seven letters in the table below. 
+ * char romans[] = { 'M',  'D', 'C','L','X','V','I'}; // roman digits
+ * int divisors[]= { 1000, 500, 100, 50, 10, 5,  1};  // divisors 
+ * 
+ * The concept of "Zero" did not exist in Europe for a long time; thus, there is no 
+ * roman numeral symbol for "Zero". The lowest number you can create from Roman 
+ * Numerals is number 1 = I. 
+ * 
+ * The biggest number is 3999 = MMMCMXCIX, because there is no letter for number 
+ * 5000 and number 4000 would be created as M (letter for 1000) and the letter 
+ * for 5000.
+ * 
+ */
 
-char * add2RomanNumbers()
-*/
+#define MAX_ROMAN 3999
 
 
 int roman2base10(char roman_digit){
@@ -285,9 +293,9 @@ int toRomanFromBase10(int base10, char *roman){
  *  1 - invalid inputs: invalid digits detected in roman numerals a or b
  *      if [ (a || b) != ['M' || 'D' || 'C' || 'L' || 'X' || 'V' || 'I'] 
  *  2 - invalid inputs: inputs a or b are out of range
- *      if [ (a <= 0)||(b <= 0)||(a > 4999)||(b > 4999) ]
+ *      if [ (a <= 0)||(b <= 0)||(a > 3999)||(b > 3999) ]
  *  3 - invalid output: result is going to be out of range   
- *      if (a + b) > 4999 
+ *      if (a + b) > 3999 
  */
 int add2Romans(char *b, char *a, char *result){
   // validate roman numeral inputs - check for valid roman digits
@@ -297,10 +305,10 @@ int add2Romans(char *b, char *a, char *result){
     return 1;
   }
   // validate inputs - check for out-of-range condition
-  if ((toBase10fromRoman(b) > 4999) || (toBase10fromRoman(a) > 4999)){
+  if ((toBase10fromRoman(b) > MAX_ROMAN) || (toBase10fromRoman(a) > MAX_ROMAN)){
     return 2;
   }
-  if ( ( toBase10fromRoman(b) + toBase10fromRoman(a) ) > 4999 ){
+  if ( ( toBase10fromRoman(b) + toBase10fromRoman(a) ) > MAX_ROMAN ){
     return 3;
   }
   
@@ -315,7 +323,7 @@ int add2Romans(char *b, char *a, char *result){
  *  1 - invalid inputs: invalid digits detected in roman numerals a or b
  *      if [ (a || b) != ['M' || 'D' || 'C' || 'L' || 'X' || 'V' || 'I'] 
  *  2 - invalid inputs: inputs a or b are out of range
- *      if [ (a <= 0)||(b <= 0)||(a > 4999)||(b > 4999) ]
+ *      if [ (a <= 0)||(b <= 0)||(a > 3999)||(b > 3999) ]
  *            \\\\\\\\////////
  *            this is a given since you can't represent zero with roman digits
  *  3 - invalid output: result is going to be out of range  or negative
@@ -328,7 +336,7 @@ int subtract2Romans(char *b, char *a, char *result){
     return 1;
   }
   // validate inputs - check for out-of-range condition, MAX_ROMAN = 4999 
-  if ((toBase10fromRoman(b) > 4999) || (toBase10fromRoman(a) > 4999)){
+  if ((toBase10fromRoman(b) > MAX_ROMAN) || (toBase10fromRoman(a) > MAX_ROMAN)){
     return 2;
   }
   if ( toBase10fromRoman(b) <= toBase10fromRoman(a) ){
