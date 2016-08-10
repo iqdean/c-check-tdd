@@ -348,7 +348,7 @@ int add2Romans(char *b, char *a, char *result){
 
 int subtract2Romans(char *b, char *a, char *result){
   // validate inputs - check for invalid roman digits in the input strings
-    if ( (chk_for_valid_roman_num(b) == 0) || (chk_for_valid_roman_num(b) == 0) ){
+    if ( (chk_for_valid_roman_num(b) == 0) || (chk_for_valid_roman_num(a) == 0) ){
     return 1;
   }
   // validate inputs - check for out-of-range condition, MAX_ROMAN = 4999 
