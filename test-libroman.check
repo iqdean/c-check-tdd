@@ -185,21 +185,95 @@
      }
 
 /*
- * Etc, Etc... create pos and neg test cases for each exported
- * function in libroman.so till u get full coverage... 
- * 
- * since I ain't getting paid for this stuff yet & i'm past the 
- * mystery of how libcheck / TDD works so the entertainment value has
- * diminished to 0, hopefully this will suffice to show i can work with 
- * the Check unit testing framework at https://libcheck.github.io/check/
- *
- * Lets cut to the chase and create unit tests for the 2 main
- * functions provided by libroman.so which are:
- *
  * int add2Romans(char *b, char *a, char *result)
- * &
- * int subtract2Romans(char *b, char *a, char *result)
- *
  */
 
+#suite add2Romans
 
+/* int add2Romans( char *b, char *a, char *result)
+ * @param char *b  input roman number b
+ * @param char *a  input roman number a
+ * @param char *result  output b+a
+ * @return
+ *  0 - success  result = b + a
+ * ERRORS
+ *  1 - invalid inputs: invalid digits detected in roman numerals a or b
+ *      if [ (a || b) != ['M' || 'D' || 'C' || 'L' || 'X' || 'V' || 'I'] 
+ *  2 - invalid inputs: inputs a or b are out of range
+ *      if [ (a <= 0)||(b <= 0)||(a > 3999)||(b > 3999) ]
+ *  3 - invalid output, b+a will result in a out of range number   
+ *      if (a + b) > 3999 
+ */
+
+#tcase tc5_add2Romans
+
+#test tc5_1_chk_invalid_b
+      printf("tc5_1_chk_invalid_b:  int add2Romans( char *b, char *a, char *result) \n");
+      char *b_in[] = {"MMMCMXCiX", "dCCCc", "cCCa", "qXXba", "xXXX", "VIIiI", "IIiI"};
+      char *a_in[] = {"MMMCMXCIX", "CM",    "CD",   "XC",    "XL",   "IX",    "IV"  };
+      int ec_out[] = {         1,       1,       1,    1,      1,     1,       1    };
+      char result[100];
+      result[0] = '\0'; //empty string
+      int ec;
+      int i;
+      for (i=0; i<7; i++){
+     	 ec = add2Romans(b_in[i], a_in[i], &result[0]);
+	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d\n", b_in[i], a_in[i], ec_out[i], ec);
+	 fail_unless(ec == 1, "tc5_1 failed w ec: %d", ec);
+	 }
+
+#test tc5_2_chk_invalid_a
+      printf("tc5_2_chk_invalid_a:  int add2Romans( char *b, char *a, char *result) \n");
+      char *a_in[] = {"MMMCMXCiX", "dCCCc", "cCCa", "qXXba", "xXXX", "VIIiI", "IIiI"};
+      char *b_in[] = {"MMMCMXCIX", "CM",    "CD",   "XC",    "XL",   "IX",    "IV"  };
+      int ec_out[] = {         1,       1,       1,    1,      1,     1,       1    };
+      char result[100];
+      result[0] = '\0'; //empty string
+      int ec;
+      int i;
+      for (i=0; i<7; i++){
+     	 ec = add2Romans(b_in[i], a_in[i], &result[0]);
+	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d\n", b_in[i], a_in[i], ec_out[i], ec);
+	 fail_unless(ec == 1, "tc5_2 failed w ec: %d", ec);
+	 }
+
+#test tc5_3_chk_invalid_ab
+      printf("tc5_3_chk_invalid_ab:  int add2Romans( char *b, char *a, char *result) \n");
+      char *a_in[] = {"MMMCMXCiX", "dCCCc", "cCCa", "qXXba", "xXXX", "VIIiI", "IIiI"};
+      char *b_in[] = {"MMMCMXCiX", "dCCCc", "cCCa", "qXXba", "xXXX", "VIIiI", "IIiI"};
+      int ec_out[] = {         1,       1,       1,    1,      1,     1,       1    };
+      char result[100];
+      result[0] = '\0'; //empty string
+      int ec;
+      int i;
+      for (i=0; i<7; i++){
+     	 ec = add2Romans(b_in[i], a_in[i], &result[0]);
+	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d\n", b_in[i], a_in[i], ec_out[i], ec);
+	 fail_unless(ec == 1, "tc5_3 failed w ec: %d", ec);
+	 }
+
+#test tc5_4_chk_valid_ab
+      printf("tc5_4_chk_valid_ab:  int add2Romans( char *b, char *a, char *result) \n");
+      char *a_in[] = {   "I", "II", "III", "IIII",    "V", "VI", "VII"};
+      char *b_in[] = {"VIII", "IX",   "X",  "XII", "XIII", "XIV", "VI"};
+      int ec_out[] = { 0,      0,      0,    0,      0,     0,      0 };
+      char result[100];
+      result[0] = '\0'; //empty string
+      int ec;
+      int i;
+      for (i=0; i<7; i++){
+     	 ec = add2Romans(b_in[i], a_in[i], &result[0]);
+	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d result: %s\n", b_in[i], a_in[i], ec_out[i], ec, &result[0]);
+	 //fail_unless(ec == 0, "tc5_4 failed w ec: %d", ec);
+	 }
+
+#test tc3_2_invalidInputRange
+
+#test tc3_4_outputOutofRange
+
+#test tc3_5_validAdditions
+
+
+/* 
+ * int subtract2Romans(char *b, char *a, char *result)
+ */

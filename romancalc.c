@@ -313,7 +313,7 @@ int add2Romans(char *b, char *a, char *result){
   // validate roman numeral inputs - check for valid roman digits
   //printf("chk_for_valid_roman_num(b): %d\n", chk_for_valid_roman_num(b));
   //printf("chk_for_valid_roman_num(a): %d\n", chk_for_valid_roman_num(a));
-  if ( (chk_for_valid_roman_num(b) == 0) || (chk_for_valid_roman_num(b) == 0) ){
+  if ( (chk_for_valid_roman_num(b) == 0) || (chk_for_valid_roman_num(a) == 0) ){
     return 1;
   }
   // validate inputs - check for out-of-range condition
