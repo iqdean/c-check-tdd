@@ -1,0 +1,10 @@
+#include "romancalc.h"
+
+#test add2romans
+      char romanN1[]="XXIV";
+      char romanN2[]="CCMX";
+      char *result = (char *) malloc(100);
+      int ec;
+      ec = add2Romans(&romanN1[0], &romanN2[0], result);
+      fail_unless(ec == 0, "add2romans() Failed with ec %d", ec);
+

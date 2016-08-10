@@ -5,9 +5,9 @@ LIB=libroman.so     # make libroman.so  - build a shared library
 LIBDEST=./
 LIBSRC=romancalc.c  # *.c includes *.h
 LIBOBJ=$(LIBSRC:.c=.o)
-	
+
 LDFLAGS=-shared -lc -Wl,-soname,$(LIB)
- 
+
 install: $(LIB)
 	@echo romancalc - installing $(LIB)
 	@install -m 444 $(LIB) $(LIBDEST)
@@ -31,5 +31,11 @@ test-shared: main.o
 	gcc main.c -L. -lroman -o test-shared
 
 clean:
-	@echo romancalc - cleaning *.o *.so test-shared
-	@$(RM) -f *.o *.so test-shared
+	@echo romancalc - cleaning *.o *.so test-shared test-add2romans test-add2romans.c
+	@$(RM) -f *.o *.so test-shared test-add2romans test-add2romans.c
+
+test-add2romans: test-add2romans.o
+	gcc test-add2romans.c -L. -lroman -lcheck -o test-add2romans
+
+test-add2romans.c: test-add2romans.check
+	checkmk test-add2romans.check >test-add2romans.c
