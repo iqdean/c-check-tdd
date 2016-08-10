@@ -31,11 +31,11 @@ test-shared: main.o
 	gcc main.c -L. -lroman -o test-shared
 
 clean:
-	@echo romancalc - cleaning *.o *.so test-shared test-add2romans test-add2romans.c
-	@$(RM) -f *.o *.so test-shared test-add2romans test-add2romans.c
+	@echo romancalc - cleaning *.o *.so test-shared test-libroman.c test-libroman.c
+	@$(RM) -f *.o *.so test-shared test-libroman test-libroman.c
 
-test-add2romans: test-add2romans.o
-	gcc test-add2romans.c -L. -lroman -lcheck -o test-add2romans
+test-libroman: test-libroman.o
+	gcc test-libroman.c -L. -lroman -lcheck -o test-libroman
 
-test-add2romans.c: test-add2romans.check
-	checkmk test-add2romans.check >test-add2romans.c
+test-libroman.c: test-libroman.check
+	checkmk test-libroman.check >test-libroman.c

@@ -51,8 +51,7 @@ int main () {
   } else {
     printf("subtract2Romans(%s - %s) resulted in ERROR: %d\n", num4, num2, ec);
   }
- 
-   
+    
   free(num1);
   free(num2);
   free(num3);

@@ -1,0 +1,31 @@
+#include "romancalc.h"
+
+#suite utils
+
+/* int chk_for_valid_roman_digit(char roman_digit) 
+ * @param char roman_digit
+ *   ONLY valid roman_digits:  M D C L X V I
+ * @return 
+ *   0 - SUCCESS, input is a valid roman_digit
+ *   1 - ERROR, input IS NOT a valid roman_digit    
+ */
+
+#tcase tc1_chk_for_valid_roman_digit
+
+#test tc1_1_pos_chk
+      char romans[] = { 'M',  'D', 'C','L','X','V','I'};
+      int ec;
+      int i;
+      for (i=0; i < 7; i++){
+      	  ec = chk_for_valid_roman_digit(romans[i]);
+	  fail_unless(ec == 0, "tc1.1 failed");
+	  }
+
+#test tc1_2_neg_chk
+      char romans[] = { 'm',  'd', 'c','l','x','v','i'};
+      int ec;
+      int i;
+      for (i=0; i < 7; i++){
+      	  ec = chk_for_valid_roman_digit(romans[i]);
+	  fail_unless(ec == 1, "tc1.2 failed");
+	  }

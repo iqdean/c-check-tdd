@@ -1,4 +1,5 @@
 #include "romancalc.h"
+
 /* roman2base10 
  * convert roman digit to base10 value
  * 
@@ -35,7 +36,13 @@ int roman2base10(char roman_digit){
   return base10;
 }
 
-/* if valid ret ec = 0 (SUCCESS) else ret ec =1 (ERROR) */
+/* int chk_for_valid_roman_digit(char roman_digit) 
+ * @param char roman_digit
+ *   ONLY valid roman_digits:  M D C L X V I
+ * @return 
+ *   0 - SUCCESS, input is a valid roman_digit
+ *   1 - ERROR, input IS NOT a valid roman_digit    
+ */
 
 int chk_for_valid_roman_digit(char roman_digit){
   int ec;
