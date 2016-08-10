@@ -22,10 +22,11 @@ $(LIB): $(LIBOBJ)
 	@echo romancalc - compiling $<
 	@$(CC) $(CFLAGS) $< -o $@
 
-# Before running test-shared
+# Before running test-shared or test-libroman
 #  set LD_LIBRARY_PATH = <path_to>/libroman.so
 #  ex: $ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
 # OR cp/install libroman.so to /usr/lib dir
+
 test-shared: main.o
 	@echo build test prog to use libroman.so
 	gcc main.c -L. -lroman -o test-shared

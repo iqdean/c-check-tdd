@@ -1,6 +1,6 @@
 #include "romancalc.h"
 
-/* roman2base10 
+/* int roman2base10(char roman_digit) 
  * convert roman digit to base10 value
  * 
  * @param char roman_digit  : I V X  L   C  D   M      Invalid Digit
@@ -99,7 +99,10 @@ int getRomanNumber(char *p){
   return chk_for_valid_roman_num(p);
 }
 
-/*  if a subtractive appears with a I, X, or C to the left of a "larger" symbol
+/*  int toBase10fromRoman(char *p)
+ *  @param  char *p   Input- uncompacted or compacted roman numeral
+ *  @return int sum   base10 number representation of Input
+ *  if a subtractive appears with a I, X, or C to the left of a "larger" symbol
  *  we need to substitute the pair for the correct numeric value
  *  
 */
@@ -178,21 +181,25 @@ void replace(char * o_string, char * s_string, char * r_string) {
       return replace(o_string, s_string, r_string);
  }
 
-/*
- * Parse string of roman numbers & do s&r of the following subtractive forms 
+/* int searchAndReplace(char *p)
+ * Parse string of roman numbers & do s&r of all known 'subtractive' forms 
  * 
  * Per Lawrence Turner Ph.D., Professor of Mathematics and Physics, retired
  * @ Southwestern Adventist University (REF: http://turner.faculty.swau.edu/):
  * 
  * The only subtractive forms are:
- *                        Starting at the top of the table,
- * DCCCC  CM    900       Search for 1st Col and Replace w 2nd Column 
+ *                        Start at the top of the table biggest 1st &
+ * DCCCC  CM    900       Search for 1st Col, Replace w 2nd Column 
  * CCCC   CD    400
  * LXXXX  XC     90
  * XXXX   XL     40
  * VIIII  IX      9 
  * IIII   IV      4
- * 
+ *
+ * @param char *p input  <- a valid uncompacted or compacted roman numeral
+ *                output -> input modified by doing s&r of all subractive forms
+ * @return
+ *    0 - SUCCESS
  */
 
 int searchAndReplace(char *p){
@@ -229,18 +236,26 @@ int getRomansFromBase10(int dividend, int divisor, int *quotient, int *remainder
     return 1;
   }
 }
-/* caller allocates mem for roman */
+
+/* int toRomanFromBase10(int base10, char *roman)
+ * @param int base10 - input  a base10 num bt 1 & 3999
+ * @param char *roman- output base10 converted to a compacted roman numeral
+ *                     caller allocates memory for char *roman
+ * @return 
+ *   0 - Success
+ *   1 - Error   base10 input is out-of-range  base10 <= 0 || base10 > MAX_ROMAN 
+ */
 int toRomanFromBase10(int base10, char *roman){
   
-  if ((base10 == 0)||(base10 > 4999)){
-    return 1; // ERROR - 0 is a invalid Roman Number:   1 < Valid Romans < 4999
+  if ((base10 <= 0)||(base10 > MAX_ROMAN)){
+    return 1; // ERROR - 0 is a invalid Roman Number:   1 < Valid Romans < 3999
   }
   
   char romans[] = { 'M',  'D', 'C','L','X','V','I'}; // roman digits
   int divisors[] = {1000, 500, 100, 50, 10, 5,  1};  // divisors
   int quotients[]= { 0,    0,   0,  0,   0, 0,  0};   // resulting quotients
   
-  // figure out how many roman digits we got in our base10 -> quotients[]
+  // 1 figure out how many roman digits we got in our base10 -> quotients[]
   int remainder;
   int i;
   for (i=0; i < 7; i++){
@@ -256,7 +271,7 @@ int toRomanFromBase10(int base10, char *roman){
   // roman[0]="";
   roman[0]='\0';
   int j;
-  // formulate char string of the roman digits we find in our base10 number
+  // 2 formulate char string of the roman digits we find in our base10 number
   //printf("substr: %s, roman: %s\n", substr, roman);
   for (i=0; i < 7; i++){
     if (quotients[i] != 0 ){
@@ -271,6 +286,7 @@ int toRomanFromBase10(int base10, char *roman){
       //printf("roman: %s\n", roman);
     }
   }
+  // 3 compact the resulting roman numeral by doing s&r of all the subtractive forms 
   searchAndReplace(roman);
   //printf("roman num out: %s\n", roman);
   
@@ -280,13 +296,17 @@ int toRomanFromBase10(int base10, char *roman){
 }
 
 /* int add2Romans( char *b, char *a, char *result)
+ * @param char *b  input roman number b
+ * @param char *a  input roman number a
+ * @param char *result  output b+a
+ * @return
  *  0 - success  result = b + a
  * ERRORS
  *  1 - invalid inputs: invalid digits detected in roman numerals a or b
  *      if [ (a || b) != ['M' || 'D' || 'C' || 'L' || 'X' || 'V' || 'I'] 
  *  2 - invalid inputs: inputs a or b are out of range
  *      if [ (a <= 0)||(b <= 0)||(a > 3999)||(b > 3999) ]
- *  3 - invalid output: result is going to be out of range   
+ *  3 - invalid output, b+a will result in a out of range number   
  *      if (a + b) > 3999 
  */
 int add2Romans(char *b, char *a, char *result){
@@ -310,6 +330,10 @@ int add2Romans(char *b, char *a, char *result){
 }
 
 /* int subtract2Romans( char *b, char *a, char *result)
+ * @param char *b  input roman number b
+ * @param char *a  input roman number a
+ * @param char *result  output b-a
+ * @return 
  *  0 - success    result = b-a
  * ERRORS
  *  1 - invalid inputs: invalid digits detected in roman numerals a or b

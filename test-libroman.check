@@ -29,3 +29,88 @@
       	  ec = chk_for_valid_roman_digit(romans[i]);
 	  fail_unless(ec == 1, "tc1.2 failed");
 	  }
+
+#tcase tc2_roman2base10
+
+/* int roman2base10(char roman_digit) 
+ * convert roman digit to base10 value
+ * 
+ * @param char roman_digit  : I V X  L   C  D   M      Invalid Digit
+ * @return int base10 value : 1 5 10 50 100 500 1000   0
+ */
+
+#test tc2_1_pos_chk
+      char romans[] = { 'M',  'D', 'C','L','X','V','I'};
+      int valid[] =   {1000,  500, 100, 50, 10, 5, 1  }; 
+      int ec;
+      int i;
+      for (i=0; i < 7; i++){
+      	  ec = roman2base10(romans[i]);
+	  fail_unless(ec == valid[i], "tc2.1 failed");
+	  }
+
+#test tc2_2_neg_chk
+      char romans[] = { 'm',  'd', 'c','l','x','v','i'};
+      int valid[] =   { 0,     0,   0,  0,  0,  0 , 0  }; 
+      int ec;
+      int i;
+      for (i=0; i < 7; i++){
+      	  ec = roman2base10(romans[i]);
+	  fail_unless(ec == valid[i], "tc2.2 failed");
+	  }
+
+#tcase tc3_toBase10fromRoman
+
+/*  int toBase10fromRoman(char *p)
+ *  @param  char *p   Input- uncompacted or compacted roman numeral
+ *  @return int sum   base10 number representation of Input
+ *  if a subtractive appears with a I, X, or C to the left of a "larger" symbol
+ *  we need to substitute the pair for the correct numeric value
+ * *p     *p    int
+ * DCCCC  CM    900   
+ * CCCC   CD    400
+ * LXXXX  XC     90
+ * XXXX   XL     40
+ * VIIII  IX      9 
+ * IIII   IV      4  
+*/
+
+#test tc3_1_chk_compacted
+      char *compact[] = {"CM",    "CD",   "XC",    "XL",   "IX",    "IV"  };
+      int expect[]    = { 900,     400,    90,      40,     9,       4    };
+      int ec;
+      int i;
+      for (i=0; i<6; i++){
+      	  ec = toBase10fromRoman(compact[i]);
+	  fail_unless(ec == expect[i], "tc3.1 failed");
+	  }
+
+#test tc3_2_chk_uncompacted
+      char *uncompact[] = {"DCCCC", "CCCC", "LXXXX", "XXXX", "VIIII", "IIII"};
+      int expect[]      = { 900,     400,    90,      40,     9,       4    };
+      int ec;
+      int i;
+      for (i=0; i<6; i++){
+      	  ec = toBase10fromRoman(uncompact[i]);
+	  fail_unless(ec == expect[i], "tc3.2 failed");
+	  }
+
+/*
+ * Etc, Etc... create pos and neg test cases for each exported
+ * function in libroman.so till u get full coverage... 
+ * 
+ * since I ain't getting paid for this stuff yet & i'm past the 
+ * mystery of how libcheck / TDD works so the entertainment value has
+ * diminished to 0, hopefully this will suffice to show i can work with 
+ * the Check unit testing framework at https://libcheck.github.io/check/
+ *
+ * Lets cut to the chase and create unit tests for the 2 main
+ * functions provided by libroman.so which are:
+ *
+ * int add2Romans(char *b, char *a, char *result)
+ * &
+ * int subtract2Romans(char *b, char *a, char *result)
+ *
+ */
+
+
