@@ -13,20 +13,26 @@
 #tcase tc1_chk_for_valid_roman_digit
 
 #test tc1_1_pos_chk
+      printf("tc1_1_pos_chk: int chk_for_valid_roman_digit(char roman_digit)\n");
       char romans[] = { 'M',  'D', 'C','L','X','V','I'};
+      int expected[]= {  0,    0,   0,  0,  0,  0,  0 };
       int ec;
       int i;
       for (i=0; i < 7; i++){
       	  ec = chk_for_valid_roman_digit(romans[i]);
+	  printf("roman_digit in: %c expected_out: %d actual_out: %d \n", romans[i], expected[i], ec);
 	  fail_unless(ec == 0, "tc1.1 failed");
 	  }
 
 #test tc1_2_neg_chk
-      char romans[] = { 'm',  'd', 'c','l','x','v','i'};
+      printf("tc1_1_neg_chk: int chk_for_valid_roman_digit(char roman_digit)\n");
+      char romans[] = { 'm',  'd', 'c','l','x','v','i', 'A', 'B', 'Q', 'J', 'p', 'q', 'r', 's'};
+      int expected[]= {  1,    1,   1,  1,  1,  1,  1,   1 ,  1,   1,   1,   1,   1,   1,   1 };
       int ec;
       int i;
-      for (i=0; i < 7; i++){
+      for (i=0; i < 15; i++){
       	  ec = chk_for_valid_roman_digit(romans[i]);
+	  printf("roman_digit in: %c expected_out: %d actual_out: %d \n", romans[i], expected[i], ec);
 	  fail_unless(ec == 1, "tc1.2 failed");
 	  }
 
@@ -40,12 +46,14 @@
  */
 
 #test tc2_1_pos_chk
+      printf("tc2_1_pos_chk: int roman2base10(char roman_digit)\n");
       char romans[] = { 'M',  'D', 'C','L','X','V','I'};
       int valid[] =   {1000,  500, 100, 50, 10, 5, 1  }; 
       int ec;
       int i;
       for (i=0; i < 7; i++){
       	  ec = roman2base10(romans[i]);
+	  printf("roman_digit in: %c expected_out: %d actual_out: %d \n", romans[i], valid[i], ec);
 	  fail_unless(ec == valid[i], "tc2.1 failed");
 	  }
 
@@ -62,7 +70,7 @@
 #tcase tc3_toBase10fromRoman
 
 /*  int toBase10fromRoman(char *p)
- *  @param  char *p   Input- uncompacted or compacted roman numeral
+ *  @param  char *p   Input- a uncompacted or compacted roman numeral
  *  @return int sum   base10 number representation of Input
  *  if a subtractive appears with a I, X, or C to the left of a "larger" symbol
  *  we need to substitute the pair for the correct numeric value
@@ -76,24 +84,105 @@
 */
 
 #test tc3_1_chk_compacted
-      char *compact[] = {"CM",    "CD",   "XC",    "XL",   "IX",    "IV"  };
-      int expect[]    = { 900,     400,    90,      40,     9,       4    };
+      printf("tc3_1_chk_compacted: int toBase10fromRoman(char *p)\n");
+      char *compact[] = {"MMMCMXCIX", "CM",    "CD",   "XC",    "XL",   "IX",    "IV"  };
+      int expect[]    = {       3999,  900,     400,    90,      40,     9,       4    };
       int ec;
       int i;
-      for (i=0; i<6; i++){
+      for (i=0; i<7; i++){
       	  ec = toBase10fromRoman(compact[i]);
+	  printf("roman_in: %s base10_out: %d expected: %d\n", compact[i], ec, expect[i]);
 	  fail_unless(ec == expect[i], "tc3.1 failed");
 	  }
 
 #test tc3_2_chk_uncompacted
-      char *uncompact[] = {"DCCCC", "CCCC", "LXXXX", "XXXX", "VIIII", "IIII"};
-      int expect[]      = { 900,     400,    90,      40,     9,       4    };
+      printf("tc3_2_chk_uncompacted: int toBase10fromRoman(char *p)\n");
+      char *uncompact[] = {"MMMMCMXCIX","DCCCC", "CCCC", "LXXXX", "XXXX", "VIIII", "IIII"};
+      int expect[]      = {        4999,    900,     400,    90,      40,     9,       4 };
       int ec;
       int i;
-      for (i=0; i<6; i++){
+      for (i=0; i<7; i++){
       	  ec = toBase10fromRoman(uncompact[i]);
+	  printf("roman_in: %s base10_out: %d expected: %d\n", uncompact[i], ec, expect[i]);
 	  fail_unless(ec == expect[i], "tc3.2 failed");
 	  }
+
+#tcase tc4_toRomanFromBase10
+
+/* int toRomanFromBase10(int base10, char *roman)
+ * @param int base10 - input  a base10 num bt 1 (MIN_ROMAN) & 3999 (MAX_ROMAN)
+ * @param char *roman- output base10 converted to a compacted roman numeral
+ *                     caller allocates memory for char *roman
+ * @return 
+ *   0 - Success
+ *   1 - Error   base10 input is out-of-range  base10 <= 0 || base10 > MAX_ROMAN
+ * 
+ *    *roman    base10   @return
+ *    output    input
+ *        |      |
+ * DCCCC  CM    900       0
+ * CCCC   CD    400       0
+ * LXXXX  XC     90       0
+ * XXXX   XL     40       0
+ * VIIII  IX      9       0
+ * IIII   IV      4       0
+ *        na      0       1
+ *        na   4000       1
+ */
+
+#test tc4_1_chk_compacted
+     printf("tc4_1_chk_compacted:  int toRomanFromBase10(int base10, char *roman) \n");
+     int base10_in[]  = { 900,     400,    90,      40,     9,       4    };
+     char *expected[] = {"CM",    "CD",  "XC",    "XL",   "IX",    "IV"  };     
+     //char *myroman = (char *) malloc(100);  // caller allocates space
+     char myroman[100];
+     myroman[0]='\0'; // empty string
+     int ec;
+     int i;
+     for (i=0; i<6; i++){
+     	 //ec = toRomanFromBase10(base10_in[i], myroman);
+     	 ec = toRomanFromBase10(base10_in[i], &myroman[0]);
+	 fail_unless(ec == 0, "tc4.1 failed w ec: %d", ec);
+	 printf("base10_in: %d  roman_out: %s expected: %s\n", base10_in[i], myroman, expected[i]);
+	 ck_assert_str_eq(myroman, expected[i]);
+	 }
+     //free(myroman);
+
+#test tc4_2_chk_bounds
+     printf("tc4_2_chk_bounds:  int toRomanFromBase10(int base10, char *roman) \n");
+     int base10_in[]  = { 0,      1,   3999,         4000   };
+     char *expected[] = {"ec1",  "I",  "MMMCMXCIX",  "ec1"   };     
+     char myroman[100];
+     myroman[0]='\0'; // empty string
+     int ec;
+     int i;
+     for (i=0; i<4; i++){
+     	 ec = toRomanFromBase10(base10_in[i], &myroman[0]);
+	 switch(i){
+	 case 0:
+	      printf("base10_in: %d  roman_out: %s expected: %s ec: %d\n", base10_in[i], myroman, expected[i], ec);
+	      fail_unless(ec == 1, "tc4.2 failed w ec: %d", ec);
+	      break;
+	 case 1:
+	      fail_unless(ec == 0, "tc4.2 failed w ec: %d", ec);
+	      printf("base10_in: %d  roman_out: %s expected: %s\n", base10_in[i], myroman, expected[i]);
+	      ck_assert_str_eq(myroman, expected[i]);
+	      myroman[0]='\0'; // empty string	      
+	      break;
+	 case 2:
+	      fail_unless(ec == 0, "tc4.2 failed w ec: %d", ec);
+	      printf("base10_in: %d  roman_out: %s expected: %s\n", base10_in[i], myroman, expected[i]);
+	      ck_assert_str_eq(myroman, expected[i]);
+	      myroman[0]='\0'; // empty string	      
+	      break;
+	 case 3:
+	      printf("base10_in: %d  roman_out: %s expected: %s ec: %d\n", base10_in[i], myroman, expected[i], ec);
+	      fail_unless(ec == 1, "tc4.2 failed w ec: %d", ec);
+	      break;
+	 default:
+	      break;
+	 }
+     }
 
 /*
  * Etc, Etc... create pos and neg test cases for each exported
