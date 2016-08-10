@@ -264,16 +264,57 @@
       for (i=0; i<7; i++){
      	 ec = add2Romans(b_in[i], a_in[i], &result[0]);
 	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d result: %s\n", b_in[i], a_in[i], ec_out[i], ec, &result[0]);
-	 //fail_unless(ec == 0, "tc5_4 failed w ec: %d", ec);
+	 fail_unless(ec == 0, "tc5_4 failed w ec: %d", ec);
 	 }
 
-#test tc3_2_invalidInputRange
+#test tc5_5_invalidIORange
+      printf("tc5_5_invalidIORange:  int add2Romans( char *b, char *a, char *result) \n");
+      char *b_in[] = {"MMMCMXCIII",  "MMMCMXCX",  "MMMCMXCV",  "X"  };
+      char *a_in[] = {         "I",         "I",         "X", "IV"  };
+      //char rslt[] =  {"MMMCMXCIV",       "NA",       "NA", "XIV"  };
+      int ec_out[] = {          0,           2,           3,    0   };
+      char result[100];
 
-#test tc3_4_outputOutofRange
+      int ec;
+      int i;
+      for (i=0; i<4; i++){
+      	 result[0] = '\0'; //empty string
+     	 ec = add2Romans(b_in[i], a_in[i], &result[0]);
+	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d, result: %s\n", b_in[i], a_in[i], ec_out[i], ec, &result[0]);
+	 switch(i){
+	 case 0:
+	      fail_unless(ec == 0, "tc5.5 failed w ec: %d", ec);
+	      break;
+	 case 1:
+	      fail_unless(ec == 2, "tc5.5 failed w ec: %d", ec);
+	      break;
+	 case 2:
+	      fail_unless(ec == 3, "tc5.5 failed w ec: %d", ec);
+	      break;
+	 case 3:
+	      fail_unless(ec == 0, "tc5.5 failed w ec: %d", ec);
+	      break;
+	 default:
+	      break;
+	 }	 
+      }
 
-#test tc3_5_validAdditions
-
+#test tc5_7_validAdditions
+      printf("tc5_7_validAdditions:  int add2Romans( char *b, char *a, char *result) \n");
+      char *b_in[] = {"CCCLXIX",  "MMCCCXXXXVIII", "DCCCC", "LXXXX",    "LXI",  "VI",  "VII"};
+      char *a_in[] = {"DCCCXLV",              "I",     "X", "CXXII",  "CXXII", "XIV",   "VI"};
+      char *expect[]={ "MCCXIV",      "MMCCCXLIX",   "CMX", "CCXII", "CLXXXIII", "XX", "XIII"};
+      char result[100];
+      int ec;
+      int i;
+      for (i=0; i<7; i++){
+         result[0] = '\0'; //empty string
+     	 ec = add2Romans(b_in[i], a_in[i], &result[0]);
+	 printf("b_in: %s  a_in: %s expected: %s actual: %s ec: %d\n", b_in[i], a_in[i], expect[i], &result[0], ec);
+	 ck_assert_str_eq(&result[0], expect[i]);
+	 }
 
 /* 
  * int subtract2Romans(char *b, char *a, char *result)
  */
+
