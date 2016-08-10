@@ -395,3 +395,53 @@
 	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d result: %s\n", b_in[i], a_in[i], ec_out[i], ec, &result[0]);
 	 fail_unless(ec == 0, "tc6_4 failed w ec: %d", ec);
 	 }
+
+#test tc6_5_invalidIORange
+      printf("tc6_5_invalidIORange:  int subtract2Romans( char *b, char *a, char *result) \n");
+      char *b_in[] = { "MMMCMXCIX",  "MMMCMXCX",        "I",   "I",  "XIV"  };
+      char *a_in[] = {         "I",         "I", "MMMCMXCX",   "V",    "V"  }; 
+      //char rslt[]= {"MMMCMXCVIII",      "ec2",      "ec2", "ec3",    "IX"  };
+      int ec_out[] = {          0,           2,          2,      3,     0   };
+      char result[100];
+
+      int ec;
+      int i;
+      for (i=0; i<5; i++){
+      	 result[0] = '\0'; //empty string
+     	 ec = subtract2Romans(b_in[i], a_in[i], &result[0]);
+	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d, result: %s\n", b_in[i], a_in[i], ec_out[i], ec, &result[0]);
+	 switch(i){
+	 case 0:
+	      fail_unless(ec == 0, "tc6.5 failed w ec: %d", ec);
+	      break;
+	 case 1:
+	      fail_unless(ec == 2, "tc6.5 failed w ec: %d", ec);
+	      break;
+	 case 2:
+	      fail_unless(ec == 2, "tc6.5 failed w ec: %d", ec);
+	      break;
+	 case 3:
+	      fail_unless(ec == 3, "tc6.5 failed w ec: %d", ec);
+	      break;
+	 case 4:
+	      fail_unless(ec == 0, "tc6.5 failed w ec: %d", ec);
+	      break;
+	 default:
+	      break;
+	 }	 
+      }
+
+#test tc6_7_validSubtractions
+      printf("tc6_7_validSubtractions:  int subtract2Romans( char *b, char *a, char *result) \n");
+      char *b_in[] =  { "MCCXIV",      "MMCCCXLIX",   "CMX", "CCXII", "CLXXXIII",  "XX", "XIII"};  //c=b+a  b
+      char *a_in[] =  {"DCCCXLV",              "I",     "X", "CXXII",    "CXXII", "XIV",   "VI"};  //a      a
+      char *expect[]= {"CCCLXIX",    "MMCCCXLVIII",    "CM",    "XC",      "LXI",  "VI",  "VII"};  //b      b-a
+      char result[100];
+      int ec;
+      int i;
+      for (i=0; i<7; i++){
+         result[0] = '\0'; //empty string
+     	 ec = subtract2Romans(b_in[i], a_in[i], &result[0]);
+	 printf("b_in: %s  a_in: %s expected: %s actual: %s ec: %d\n", b_in[i], a_in[i], expect[i], &result[0], ec);
+	 ck_assert_str_eq(&result[0], expect[i]);
+	 }
