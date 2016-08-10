@@ -103,7 +103,7 @@
       int i;
       for (i=0; i<7; i++){
       	  ec = toBase10fromRoman(uncompact[i]);
-	  printf("roman_in: %s base10_out: %d expected: %d\n", uncompact[i], ec, expect[i]);
+	  printf("roman_in: %s\t base10_out: %d expected: %d\n", uncompact[i], ec, expect[i]);
 	  fail_unless(ec == expect[i], "tc3.2 failed");
 	  }
 
@@ -143,7 +143,7 @@
      	 //ec = toRomanFromBase10(base10_in[i], myroman);
      	 ec = toRomanFromBase10(base10_in[i], &myroman[0]);
 	 fail_unless(ec == 0, "tc4.1 failed w ec: %d", ec);
-	 printf("base10_in: %d  roman_out: %s expected: %s\n", base10_in[i], myroman, expected[i]);
+	 printf("base10_in: %d  roman_out: %s\t expected: %s\n", base10_in[i], myroman, expected[i]);
 	 ck_assert_str_eq(myroman, expected[i]);
 	 }
      //free(myroman);
@@ -160,23 +160,23 @@
      	 ec = toRomanFromBase10(base10_in[i], &myroman[0]);
 	 switch(i){
 	 case 0:
-	      printf("base10_in: %d  roman_out: %s expected: %s ec: %d\n", base10_in[i], myroman, expected[i], ec);
+	      printf("base10_in: %d  roman_out: %s\t expected: %s\t ec: %d\n", base10_in[i], myroman, expected[i], ec);
 	      fail_unless(ec == 1, "tc4.2 failed w ec: %d", ec);
 	      break;
 	 case 1:
 	      fail_unless(ec == 0, "tc4.2 failed w ec: %d", ec);
-	      printf("base10_in: %d  roman_out: %s expected: %s\n", base10_in[i], myroman, expected[i]);
+	      printf("base10_in: %d  roman_out: %s\t expected: %s\n", base10_in[i], myroman, expected[i]);
 	      ck_assert_str_eq(myroman, expected[i]);
 	      myroman[0]='\0'; // empty string	      
 	      break;
 	 case 2:
 	      fail_unless(ec == 0, "tc4.2 failed w ec: %d", ec);
-	      printf("base10_in: %d  roman_out: %s expected: %s\n", base10_in[i], myroman, expected[i]);
+	      printf("base10_in: %d  roman_out: %s\t expected: %s\n", base10_in[i], myroman, expected[i]);
 	      ck_assert_str_eq(myroman, expected[i]);
 	      myroman[0]='\0'; // empty string	      
 	      break;
 	 case 3:
-	      printf("base10_in: %d  roman_out: %s expected: %s ec: %d\n", base10_in[i], myroman, expected[i], ec);
+	      printf("base10_in: %d  roman_out: %s\t expected: %s\t ec: %d\n", base10_in[i], myroman, expected[i], ec);
 	      fail_unless(ec == 1, "tc4.2 failed w ec: %d", ec);
 	      break;
 	 default:
@@ -218,7 +218,7 @@
       int i;
       for (i=0; i<7; i++){
      	 ec = add2Romans(b_in[i], a_in[i], &result[0]);
-	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d\n", b_in[i], a_in[i], ec_out[i], ec);
+	 printf("b_in: %s\t  a_in: %s\t expected_ec: %d actual_ec: %d\n", b_in[i], a_in[i], ec_out[i], ec);
 	 fail_unless(ec == 1, "tc5_1 failed w ec: %d", ec);
 	 }
 
@@ -233,7 +233,7 @@
       int i;
       for (i=0; i<7; i++){
      	 ec = add2Romans(b_in[i], a_in[i], &result[0]);
-	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d\n", b_in[i], a_in[i], ec_out[i], ec);
+	 printf("b_in: %s\t  a_in: %s\t expected_ec: %d actual_ec: %d\n", b_in[i], a_in[i], ec_out[i], ec);
 	 fail_unless(ec == 1, "tc5_2 failed w ec: %d", ec);
 	 }
 
@@ -248,7 +248,7 @@
       int i;
       for (i=0; i<7; i++){
      	 ec = add2Romans(b_in[i], a_in[i], &result[0]);
-	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d\n", b_in[i], a_in[i], ec_out[i], ec);
+	 printf("b_in: %s\t  a_in: %s\t expected_ec: %d actual_ec: %d\n", b_in[i], a_in[i], ec_out[i], ec);
 	 fail_unless(ec == 1, "tc5_3 failed w ec: %d", ec);
 	 }
 
@@ -263,7 +263,7 @@
       int i;
       for (i=0; i<7; i++){
      	 ec = add2Romans(b_in[i], a_in[i], &result[0]);
-	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d result: %s\n", b_in[i], a_in[i], ec_out[i], ec, &result[0]);
+	 printf("b_in: %s\t  a_in: %s\t expected_ec: %d actual_ec: %d result: %s\n", b_in[i], a_in[i], ec_out[i], ec, &result[0]);
 	 fail_unless(ec == 0, "tc5_4 failed w ec: %d", ec);
 	 }
 
@@ -280,7 +280,7 @@
       for (i=0; i<4; i++){
       	 result[0] = '\0'; //empty string
      	 ec = add2Romans(b_in[i], a_in[i], &result[0]);
-	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d, result: %s\n", b_in[i], a_in[i], ec_out[i], ec, &result[0]);
+	 printf("b_in: %s\t  a_in: %s\t expected_ec: %d actual_ec: %d, result: %s\n", b_in[i], a_in[i], ec_out[i], ec, &result[0]);
 	 switch(i){
 	 case 0:
 	      fail_unless(ec == 0, "tc5.5 failed w ec: %d", ec);
@@ -310,7 +310,7 @@
       for (i=0; i<7; i++){
          result[0] = '\0'; //empty string
      	 ec = add2Romans(b_in[i], a_in[i], &result[0]);
-	 printf("b_in: %s  a_in: %s expected: %s actual: %s ec: %d\n", b_in[i], a_in[i], expect[i], &result[0], ec);
+	 printf("b_in: %s\t  a_in: %s\t expected: %s\t actual: %s\t ec: %d\n", b_in[i], a_in[i], expect[i], &result[0], ec);
 	 ck_assert_str_eq(&result[0], expect[i]);
 	 }
 
@@ -346,7 +346,7 @@
       int i;
       for (i=0; i<7; i++){
      	 ec = subtract2Romans(b_in[i], a_in[i], &result[0]);
-	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d\n", b_in[i], a_in[i], ec_out[i], ec);
+	 printf("b_in: %s\t  a_in: %s\t expected_ec: %d actual_ec: %d\n", b_in[i], a_in[i], ec_out[i], ec);
 	 fail_unless(ec == 1, "tc6_1 failed w ec: %d", ec);
 	 }
 
@@ -361,7 +361,7 @@
       int i;
       for (i=0; i<7; i++){
      	 ec = subtract2Romans(b_in[i], a_in[i], &result[0]);
-	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d\n", b_in[i], a_in[i], ec_out[i], ec);
+	 printf("b_in: %s\t  a_in: %s\t expected_ec: %d actual_ec: %d\n", b_in[i], a_in[i], ec_out[i], ec);
 	 fail_unless(ec == 1, "tc6_2 failed w ec: %d", ec);
 	 }
 
@@ -376,7 +376,7 @@
       int i;
       for (i=0; i<7; i++){
      	 ec = subtract2Romans(b_in[i], a_in[i], &result[0]);
-	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d\n", b_in[i], a_in[i], ec_out[i], ec);
+	 printf("b_in: %s\t  a_in: %s\t expected_ec: %d actual_ec: %d\n", b_in[i], a_in[i], ec_out[i], ec);
 	 fail_unless(ec == 1, "tc6_3 failed w ec: %d", ec);
 	 }
 
@@ -392,7 +392,7 @@
       int i;
       for (i=0; i<7; i++){
      	 ec = subtract2Romans(b_in[i], a_in[i], &result[0]);
-	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d result: %s\n", b_in[i], a_in[i], ec_out[i], ec, &result[0]);
+	 printf("b_in: %s\t  a_in: %s\t expected_ec: %d actual_ec: %d result: %s\n", b_in[i], a_in[i], ec_out[i], ec, &result[0]);
 	 fail_unless(ec == 0, "tc6_4 failed w ec: %d", ec);
 	 }
 
@@ -409,7 +409,7 @@
       for (i=0; i<5; i++){
       	 result[0] = '\0'; //empty string
      	 ec = subtract2Romans(b_in[i], a_in[i], &result[0]);
-	 printf("b_in: %s  a_in: %s expected_ec: %d actual_ec: %d, result: %s\n", b_in[i], a_in[i], ec_out[i], ec, &result[0]);
+	 printf("b_in: %s\t  a_in: %s\t expected_ec: %d actual_ec: %d, result: %s\n", b_in[i], a_in[i], ec_out[i], ec, &result[0]);
 	 switch(i){
 	 case 0:
 	      fail_unless(ec == 0, "tc6.5 failed w ec: %d", ec);
@@ -442,6 +442,6 @@
       for (i=0; i<7; i++){
          result[0] = '\0'; //empty string
      	 ec = subtract2Romans(b_in[i], a_in[i], &result[0]);
-	 printf("b_in: %s  a_in: %s expected: %s actual: %s ec: %d\n", b_in[i], a_in[i], expect[i], &result[0], ec);
+	 printf("b_in: %s\t  a_in: %s\t expected: %s\t actual: %s\t ec: %d\n", b_in[i], a_in[i], expect[i], &result[0], ec);
 	 ck_assert_str_eq(&result[0], expect[i]);
 	 }
