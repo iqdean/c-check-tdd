@@ -3,7 +3,10 @@ README
 --------
 
 libroman.so
-Library to allow addition and subtractions of Roman Numerals
+Shared Library to allow addition and subtractions of Roman Numerals
+
+libroman.a
+Static Library to allow addition and subtractions of Roman Numerals
 
 1 Prerequisites:
 ----------------
@@ -50,7 +53,7 @@ $ git clone https://github.com/libcheck/check.git
 $ autoreconf --install
 $ make
 $ make check
-$ sudo make install 
+$ sudo make install
 
 $ ls ~/check
 check-0.10.0  check-0.10.0.tar.gz
@@ -83,53 +86,54 @@ $ git clone https://iqdean@bitbucket.org/iqdean/pillar.git
 
 $ tree -L 1
 
-├── Makefile		Makefile for libroman.so & test tools (test-shared and test-libroman)
+├── Makefile.shared		Makefile for libroman.so & test tools (test-shared and test-libroman)
 
-├── romancalc.c		Source code for libroman.so
-├── romancalc.h		
+├── romancalc.c				Source code for libroman.so
+├── romancalc.h
 
 ├── main.c					source code for test-shared   (command line test util for libroman.so)
 └── test-libroman.check		source code for test-libroman (Check based unit tests for libroman.so)
-							Check is a unit testing framework for C (https://libcheck.github.io/check/)
+						              Check is a unit testing framework for C (https://libcheck.github.io/check/)
 
 
-3 BUILD libroman.so, test-shared, and test-libroman
+3 BUILD & RUN A SHARED LIBRARY - libroman.so, test-shared, and test-libroman
 -----
 
 3.1. Make sure you have LD_LIBRARY_PATH set as follows:
 
+$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
 $ env | grep LD_LIBRARY_PATH
-LD_LIBRARY_PATH=:.:/usr/local/lib
+LD_LIBRARY_PATH=:.
 
-3.2. Build everything using the Makefile as follows:
+3.2. Build everything using the Makefile.shared as follows:
 
-$ make clean
-$ make libroman.so
-$ make test-shared
-$ make test-libroman
+$ make clean -f Makefile.shared
+$ make libroman.so -f Makefile.shared
+$ make test-shared -f Makefile.shared
+$ make test-libroman -f Makefile.shared
 
 4 RUN TEST CODE for libroman.so
 -------------
 
 4.1 To run test-shared  (command line test tool)
 
-test-shared lets you plan with libroman.so from the commandline
+test-shared lets you play with libroman.so from the commandline
 
 Note: the getRomanNumber(char *p) function in libroman.so will only accept VALID roman numbers
 
 iqdean@hpdm4:~/u1404/pillar/pillar8/pillar$ ./test-shared
 Enter a Roman Number : XXiX
-You entered invalid Roman Number, try again 
+You entered invalid Roman Number, try again
 Enter a Roman Number : XXIV
 Enter a Roman Number : CCMV
 toBase10fromRoman(XXIV): 24
 toBase10fromRoman(CCMV): 1005
- 1005 > toRomanFromBase10 > MV 
+ 1005 > toRomanFromBase10 > MV
 add2Romans(XXIV + CCMV = MXXIX)
 toBase10fromRoman(MXXIX): 1029
 subtract2Romans(MXXIX - CCMV = XXIV)
 toBase10fromRoman(XXIV): 24
-iqdean@hpdm4:~/u1404/pillar/pillar8/pillar$ 
+iqdean@hpdm4:~/u1404/pillar/pillar8/pillar$
 
 
 4.2 To run test-libroman (Check based unit tests)
@@ -141,37 +145,37 @@ See example below
 $ ./test-libroman
 Running suite(s): utils
 tc1_1_pos_chk: int chk_for_valid_roman_digit(char roman_digit)
-roman_digit in: M expected_out: 0 actual_out: 0 
-roman_digit in: D expected_out: 0 actual_out: 0 
-roman_digit in: C expected_out: 0 actual_out: 0 
-roman_digit in: L expected_out: 0 actual_out: 0 
-roman_digit in: X expected_out: 0 actual_out: 0 
-roman_digit in: V expected_out: 0 actual_out: 0 
-roman_digit in: I expected_out: 0 actual_out: 0 
+roman_digit in: M expected_out: 0 actual_out: 0
+roman_digit in: D expected_out: 0 actual_out: 0
+roman_digit in: C expected_out: 0 actual_out: 0
+roman_digit in: L expected_out: 0 actual_out: 0
+roman_digit in: X expected_out: 0 actual_out: 0
+roman_digit in: V expected_out: 0 actual_out: 0
+roman_digit in: I expected_out: 0 actual_out: 0
 tc1_1_neg_chk: int chk_for_valid_roman_digit(char roman_digit)
-roman_digit in: m expected_out: 1 actual_out: 1 
-roman_digit in: d expected_out: 1 actual_out: 1 
-roman_digit in: c expected_out: 1 actual_out: 1 
-roman_digit in: l expected_out: 1 actual_out: 1 
-roman_digit in: x expected_out: 1 actual_out: 1 
-roman_digit in: v expected_out: 1 actual_out: 1 
-roman_digit in: i expected_out: 1 actual_out: 1 
-roman_digit in: A expected_out: 1 actual_out: 1 
-roman_digit in: B expected_out: 1 actual_out: 1 
-roman_digit in: Q expected_out: 1 actual_out: 1 
-roman_digit in: J expected_out: 1 actual_out: 1 
-roman_digit in: p expected_out: 1 actual_out: 1 
-roman_digit in: q expected_out: 1 actual_out: 1 
-roman_digit in: r expected_out: 1 actual_out: 1 
-roman_digit in: s expected_out: 1 actual_out: 1 
+roman_digit in: m expected_out: 1 actual_out: 1
+roman_digit in: d expected_out: 1 actual_out: 1
+roman_digit in: c expected_out: 1 actual_out: 1
+roman_digit in: l expected_out: 1 actual_out: 1
+roman_digit in: x expected_out: 1 actual_out: 1
+roman_digit in: v expected_out: 1 actual_out: 1
+roman_digit in: i expected_out: 1 actual_out: 1
+roman_digit in: A expected_out: 1 actual_out: 1
+roman_digit in: B expected_out: 1 actual_out: 1
+roman_digit in: Q expected_out: 1 actual_out: 1
+roman_digit in: J expected_out: 1 actual_out: 1
+roman_digit in: p expected_out: 1 actual_out: 1
+roman_digit in: q expected_out: 1 actual_out: 1
+roman_digit in: r expected_out: 1 actual_out: 1
+roman_digit in: s expected_out: 1 actual_out: 1
 tc2_1_pos_chk: int roman2base10(char roman_digit)
-roman_digit in: M expected_out: 1000 actual_out: 1000 
-roman_digit in: D expected_out: 500 actual_out: 500 
-roman_digit in: C expected_out: 100 actual_out: 100 
-roman_digit in: L expected_out: 50 actual_out: 50 
-roman_digit in: X expected_out: 10 actual_out: 10 
-roman_digit in: V expected_out: 5 actual_out: 5 
-roman_digit in: I expected_out: 1 actual_out: 1 
+roman_digit in: M expected_out: 1000 actual_out: 1000
+roman_digit in: D expected_out: 500 actual_out: 500
+roman_digit in: C expected_out: 100 actual_out: 100
+roman_digit in: L expected_out: 50 actual_out: 50
+roman_digit in: X expected_out: 10 actual_out: 10
+roman_digit in: V expected_out: 5 actual_out: 5
+roman_digit in: I expected_out: 1 actual_out: 1
 tc3_1_chk_compacted: int toBase10fromRoman(char *p)
 roman_in: MMMCMXCIX base10_out: 3999 expected: 3999
 roman_in: CM base10_out: 900 expected: 900
@@ -188,20 +192,20 @@ roman_in: LXXXX	 base10_out: 90 expected: 90
 roman_in: XXXX	 base10_out: 40 expected: 40
 roman_in: VIIII	 base10_out: 9 expected: 9
 roman_in: IIII	 base10_out: 4 expected: 4
-tc4_1_chk_compacted:  int toRomanFromBase10(int base10, char *roman) 
+tc4_1_chk_compacted:  int toRomanFromBase10(int base10, char *roman)
 base10_in: 900  roman_out: CM	 expected: CM
 base10_in: 400  roman_out: CD	 expected: CD
 base10_in: 90  roman_out: XC	 expected: XC
 base10_in: 40  roman_out: XL	 expected: XL
 base10_in: 9  roman_out: IX	 expected: IX
 base10_in: 4  roman_out: IV	 expected: IV
-tc4_2_chk_bounds:  int toRomanFromBase10(int base10, char *roman) 
+tc4_2_chk_bounds:  int toRomanFromBase10(int base10, char *roman)
 base10_in: 0  roman_out: 	 expected: ec1	 ec: 1
 base10_in: 1  roman_out: I	 expected: I
 base10_in: 3999  roman_out: MMMCMXCIX	 expected: MMMCMXCIX
 base10_in: 4000  roman_out: 	 expected: ec1	 ec: 1
  add2Romans
-tc5_1_chk_invalid_b:  int add2Romans( char *b, char *a, char *result) 
+tc5_1_chk_invalid_b:  int add2Romans( char *b, char *a, char *result)
 b_in: MMMCMXCiX	  a_in: MMMCMXCIX	 expected_ec: 1 actual_ec: 1
 b_in: dCCCc	  a_in: CM	 expected_ec: 1 actual_ec: 1
 b_in: cCCa	  a_in: CD	 expected_ec: 1 actual_ec: 1
@@ -209,7 +213,7 @@ b_in: qXXba	  a_in: XC	 expected_ec: 1 actual_ec: 1
 b_in: xXXX	  a_in: XL	 expected_ec: 1 actual_ec: 1
 b_in: VIIiI	  a_in: IX	 expected_ec: 1 actual_ec: 1
 b_in: IIiI	  a_in: IV	 expected_ec: 1 actual_ec: 1
-tc5_2_chk_invalid_a:  int add2Romans( char *b, char *a, char *result) 
+tc5_2_chk_invalid_a:  int add2Romans( char *b, char *a, char *result)
 b_in: MMMCMXCIX	  a_in: MMMCMXCiX	 expected_ec: 1 actual_ec: 1
 b_in: CM	  a_in: dCCCc	 expected_ec: 1 actual_ec: 1
 b_in: CD	  a_in: cCCa	 expected_ec: 1 actual_ec: 1
@@ -217,7 +221,7 @@ b_in: XC	  a_in: qXXba	 expected_ec: 1 actual_ec: 1
 b_in: XL	  a_in: xXXX	 expected_ec: 1 actual_ec: 1
 b_in: IX	  a_in: VIIiI	 expected_ec: 1 actual_ec: 1
 b_in: IV	  a_in: IIiI	 expected_ec: 1 actual_ec: 1
-tc5_3_chk_invalid_ab:  int add2Romans( char *b, char *a, char *result) 
+tc5_3_chk_invalid_ab:  int add2Romans( char *b, char *a, char *result)
 b_in: MMMCMXCiX	  a_in: MMMCMXCiX	 expected_ec: 1 actual_ec: 1
 b_in: dCCCc	  a_in: dCCCc	 expected_ec: 1 actual_ec: 1
 b_in: cCCa	  a_in: cCCa	 expected_ec: 1 actual_ec: 1
@@ -225,7 +229,7 @@ b_in: qXXba	  a_in: qXXba	 expected_ec: 1 actual_ec: 1
 b_in: xXXX	  a_in: xXXX	 expected_ec: 1 actual_ec: 1
 b_in: VIIiI	  a_in: VIIiI	 expected_ec: 1 actual_ec: 1
 b_in: IIiI	  a_in: IIiI	 expected_ec: 1 actual_ec: 1
-tc5_4_chk_valid_ab:  int add2Romans( char *b, char *a, char *result) 
+tc5_4_chk_valid_ab:  int add2Romans( char *b, char *a, char *result)
 b_in: VIII	  a_in: I	 expected_ec: 0 actual_ec: 0 result: IX
 b_in: IX	  a_in: II	 expected_ec: 0 actual_ec: 0 result: XI
 b_in: X	  a_in: III	 expected_ec: 0 actual_ec: 0 result: XIII
@@ -233,12 +237,12 @@ b_in: XII	  a_in: IIII	 expected_ec: 0 actual_ec: 0 result: XVI
 b_in: XIII	  a_in: V	 expected_ec: 0 actual_ec: 0 result: XVIII
 b_in: XIV	  a_in: VI	 expected_ec: 0 actual_ec: 0 result: XX
 b_in: VI	  a_in: VII	 expected_ec: 0 actual_ec: 0 result: XIII
-tc5_5_invalidIORange:  int add2Romans( char *b, char *a, char *result) 
+tc5_5_invalidIORange:  int add2Romans( char *b, char *a, char *result)
 b_in: MMMCMXCIII	  a_in: I	 expected_ec: 0 actual_ec: 0, result: MMMCMXCIV
-b_in: MMMCMXCX	  a_in: I	 expected_ec: 2 actual_ec: 2, result: 
-b_in: MMMCMXCV	  a_in: X	 expected_ec: 3 actual_ec: 3, result: 
+b_in: MMMCMXCX	  a_in: I	 expected_ec: 2 actual_ec: 2, result:
+b_in: MMMCMXCV	  a_in: X	 expected_ec: 3 actual_ec: 3, result:
 b_in: X	  a_in: IV	 expected_ec: 0 actual_ec: 0, result: XIV
-tc5_7_validAdditions:  int add2Romans( char *b, char *a, char *result) 
+tc5_7_validAdditions:  int add2Romans( char *b, char *a, char *result)
 b_in: CCCLXIX	  a_in: DCCCXLV	 expected: MCCXIV	 actual: MCCXIV	 ec: 0
 b_in: MMCCCXXXXVIII	  a_in: I	 expected: MMCCCXLIX	 actual: MMCCCXLIX	 ec: 0
 b_in: DCCCC	  a_in: X	 expected: CMX	 actual: CMX	 ec: 0
@@ -279,13 +283,13 @@ b_in: XVI	  a_in: IIII	 expected_ec: 0 actual_ec: 0 result: XII
 b_in: XVIII	  a_in: V	 expected_ec: 0 actual_ec: 0 result: XIII
 b_in: XX	  a_in: VI	 expected_ec: 0 actual_ec: 0 result: XIV
 b_in: XIII	  a_in: VII	 expected_ec: 0 actual_ec: 0 result: VI
-tc6_5_invalidIORange:  int subtract2Romans( char *b, char *a, char *result) 
+tc6_5_invalidIORange:  int subtract2Romans( char *b, char *a, char *result)
 b_in: MMMCMXCIX	  a_in: I	 expected_ec: 0 actual_ec: 0, result: MMMCMXCVIII
-b_in: MMMCMXCX	  a_in: I	 expected_ec: 2 actual_ec: 2, result: 
-b_in: I	  a_in: MMMCMXCX	 expected_ec: 2 actual_ec: 2, result: 
-b_in: I	  a_in: V	 expected_ec: 3 actual_ec: 3, result: 
+b_in: MMMCMXCX	  a_in: I	 expected_ec: 2 actual_ec: 2, result:
+b_in: I	  a_in: MMMCMXCX	 expected_ec: 2 actual_ec: 2, result:
+b_in: I	  a_in: V	 expected_ec: 3 actual_ec: 3, result:
 b_in: XIV	  a_in: V	 expected_ec: 0 actual_ec: 0, result: IX
-tc6_7_validSubtractions:  int subtract2Romans( char *b, char *a, char *result) 
+tc6_7_validSubtractions:  int subtract2Romans( char *b, char *a, char *result)
 b_in: MCCXIV	  a_in: DCCCXLV	 expected: CCCLXIX	 actual: CCCLXIX	 ec: 0
 b_in: MMCCCXLIX	  a_in: I	 expected: MMCCCXLVIII	 actual: MMCCCXLVIII	 ec: 0
 b_in: CMX	  a_in: X	 expected: CM	 actual: CM	 ec: 0
@@ -294,4 +298,3 @@ b_in: CLXXXIII	  a_in: CXXII	 expected: LXI	 actual: LXI	 ec: 0
 b_in: XX	  a_in: XIV	 expected: VI	 actual: VI	 ec: 0
 b_in: XIII	  a_in: VI	 expected: VII	 actual: VII	 ec: 0
 100%: Checks: 20, Failures: 0, Errors: 0
-

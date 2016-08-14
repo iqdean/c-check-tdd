@@ -9,22 +9,27 @@ LIBSRC=romancalc.c  # *.c includes *.h
 LIBOBJ=$(LIBSRC:.c=.o)
 
 install: $(LIB)
-	@echo lib Makefile - installing $(LIB)
+	@echo lib romancalc - installing $(LIB)
 	@install -m 444 $(LIB) $(LIBDEST)
 
-$(LIB): $(LIBOBJ) 
-	@echo lib Makefile - archiving $(LIB)
+$(LIB): $(LIBOBJ)
+	@echo lib romancalc - archiving $(LIB)
 	@$(AR) rcs $(LIB) $(LIBOBJ)        # ar --help for rcs
 
 .c.o:
-	@echo lib Makefile - compiling $<
+	@echo lib romancalc - compiling $<
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 test-static: main.o
-	@echo building test prog using libroman.a
+	@echo building test-static using libroman.a
 	gcc main.c -L. -lroman -o test-static
 
 clean:
-	@echo lib Makefile - cleaning *.o *.a test-static
-	@$(RM) -f *.o *.a test-static
- 
+	@echo lib test-static - cleaning *.o *.a test-static
+	@$(RM) -f *.o *.a test-static test-libroman test-libroman.c
+
+test-libroman: test-libroman.o
+	gcc test-libroman.c -L. -lroman -lcheck -o test-libroman
+
+test-libroman.c: test-libroman.check
+	checkmk test-libroman.check >test-libroman.c

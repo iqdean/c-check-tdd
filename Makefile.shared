@@ -5,16 +5,16 @@ LIB=libroman.so     # make libroman.so  - build a shared library
 LIBDEST=./
 LIBSRC=romancalc.c  # *.c includes *.h
 LIBOBJ=$(LIBSRC:.c=.o)
-	
+
 LDFLAGS=-shared -lc -Wl,-soname,$(LIB)
- 
+
 install: $(LIB)
 	@echo romancalc - installing $(LIB)
 	@install -m 444 $(LIB) $(LIBDEST)
 
 # gcc -shared -lc -Wl,-soname,libroman.so -o libroman.so romancalc.o
 
-$(LIB): $(LIBOBJ) 
+$(LIB): $(LIBOBJ)
 	@echo romancalc - linking $(LIB)
 	$(CC) $(LDFLAGS) -o $(LIB) $(LIBOBJ)
 
@@ -22,14 +22,21 @@ $(LIB): $(LIBOBJ)
 	@echo romancalc - compiling $<
 	@$(CC) $(CFLAGS) $< -o $@
 
-# Before running test-shared
+# Before running test-shared or test-libroman
 #  set LD_LIBRARY_PATH = <path_to>/libroman.so
 #  ex: $ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
 # OR cp/install libroman.so to /usr/lib dir
+
 test-shared: main.o
 	@echo build test prog to use libroman.so
 	gcc main.c -L. -lroman -o test-shared
 
 clean:
-	@echo romancalc - cleaning *.o *.so
-	@$(RM) -f *.o *.so
+	@echo romancalc - cleaning *.o *.so test-shared test-libroman.c test-libroman.c
+	@$(RM) -f *.o *.so test-shared test-libroman test-libroman.c
+
+test-libroman: test-libroman.o
+	gcc test-libroman.c -L. -lroman -lcheck -o test-libroman
+
+test-libroman.c: test-libroman.check
+	checkmk test-libroman.check >test-libroman.c
